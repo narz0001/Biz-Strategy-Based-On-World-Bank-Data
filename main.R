@@ -59,3 +59,10 @@ groupByCountries = function(df) {
   return (dfout)
 }
 
+#Main Section
+setwd("/Users/geolangsatnarzary/Study - NTU_NBS/6002 - ML and AI/PyCharm Projects/Biz-Strategy-Based-On-World-Bank-Data/")
+filename <- "World-Bank-Data.csv"
+df00 <- read.csv(filename)
+
+df <- cleanWBData(df00)
+head(df)
