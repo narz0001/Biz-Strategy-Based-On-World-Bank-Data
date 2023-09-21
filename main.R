@@ -1,2 +1,5 @@
-install.packages('cluster', repos = "http://cran.us.r-project.org")
-install.packages('stringr', repos = "http://cran.us.r-project.org")
+#Initializing the required packages and clearing cache
+library(cluster)
+library(stringr)
+rm(list=ls())
+
