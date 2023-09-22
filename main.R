@@ -66,15 +66,41 @@ subset_df = function(df, x){
   return(df[df$Series.Code==x,])
 }
 
-#Function to remove empty columns
-remove_columns_with_na <- function(df) {
-  # Get NA only columns
-  na_columns <- which(colSums(is.na(df)) == nrow(df))
+#Cleans the dataframe on the following parameters: (Year Data starts from 5th column)
+#1. If the 5th column has the value NA, search the rest of the columns serially (starting from the 6th column to the last column) and put the first non-NA value found in the 5th column.
+#2. 6th column onwards if the current column has the value NA, take the value of the previous column.
+#3. If the values in the 5th to the last columns are all NA, drop the row.
+clean_dataframe <- function(df) {
+  # Iterate over rows
+  for (i in 1:nrow(df)) {
+    # If the 5th column is NA
+    if (is.na(df[i, 5])) {
+      # Search for the first non-NA value in columns 6 and onwards
+      first_non_na <- NA
+      for (j in 6:ncol(df)) {
+        if (!is.na(df[i, j])) {
+          first_non_na <- df[i, j]
+          break
+        }
+      }
+      # Assign the first non-NA value to the 5th column
+      df[i, 5] <- first_non_na
+    }
 
-  # Remove NA only columns
-  df <- df[, -na_columns]
+    # Fill NA values in columns 6 and onwards with the previous column's value
+    for (j in 6:ncol(df)) {
+      if (is.na(df[i, j])) {
+        df[i, j] <- df[i, j - 1]
+      }
+    }
+  }
 
   return(df)
+}
+
+#Function to remove rows that have NA values across 2013-2023
+remove_rows_with_all_data_na <- function(df) {
+  df[complete.cases(df[, 5:14]), ]
 }
 
 #Main Section
