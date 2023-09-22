@@ -73,4 +73,6 @@ df00 <- read.csv(filename)
 
 df <- cleanWBData(df00)
 
-df_income_held_by_top10 <- subset_df(df, 'SI.DST.10TH.10')
+#Flattening the data by using groupByCountries function
+df = groupByCountries(df)
+
