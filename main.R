@@ -1,6 +1,8 @@
 #Initializing the required packages and clearing cache
+library(factoextra)
 library(cluster)
 library(stringr)
+library(tidyr)
 rm(list=ls())
 
 #Function to clean World-Bank-Data, removing necessary headers and footers and formatting Year column
