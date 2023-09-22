@@ -161,3 +161,6 @@ clustered_countries <- aggregate(Country.Name ~ Cluster, data = df, FUN = functi
 
 # Printing the result
 print(clustered_countries)
+
+# Writing the result to a file
+write.table(clustered_countries, file = "grouped_countries.txt", sep = ",", row.names = FALSE)
