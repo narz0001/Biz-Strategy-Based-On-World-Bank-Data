@@ -138,3 +138,19 @@ for (i in 1:10) {
 
 # Finding optimal k using "Elbow Method"
 plot(1:10, wss, type = "b", xlab = "Number of Clusters (K)", ylab = "Within-Cluster Sum of Squares")
+
+# Step 3: Clustering
+# Run the k-means clustering algorithm with the chosen K
+chosen_k <- 5
+kmeans_model <- kmeans(selected_data, centers = chosen_k)
+
+# Step 4: Analyze Clusters
+# Assign cluster labels
+cluster_labels <- kmeans_model$cluster
+
+# Add the cluster labels to original data
+df_with_clusters <- cbind(df, Cluster = cluster_labels)
+
+#Confirming optimal k using silhouette plot
+silhouette_plot <- silhouette(kmeans_model$cluster, dist(selected_data))
+plot(silhouette_plot)
