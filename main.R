@@ -59,10 +59,16 @@ groupByCountries = function(df) {
   return (dfout)
 }
 
+#Function to subset dataframes based on x series code
+subset_df = function(df, x){
+  return(df[df$Series.Code==x,])
+}
+
 #Main Section
 setwd("/Users/geolangsatnarzary/Study - NTU_NBS/6002 - ML and AI/PyCharm Projects/Biz-Strategy-Based-On-World-Bank-Data/")
-filename <- "World-Bank-Data.csv"
+filename <- "WB-Data.csv"
 df00 <- read.csv(filename)
 
 df <- cleanWBData(df00)
-head(df)
+
+df_income_held_by_top10 <- subset_df(df, 'SI.DST.10TH.10')
