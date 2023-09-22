@@ -119,3 +119,22 @@ df <- groupByCountries(df)
 ##Removed these data because these countries be used for analysis.
 df <- na.omit(df)
 
+# Step 1: Data Preparation and Cleaning (Already cleaned above)
+# Select the columns relevant for clustering
+selected_data <- df %>%
+  select(NY.GDP.PCAP.CD.YR2013:PV.PER.RNK.YR2021)
+
+# Step 2: Determining the Number of Clusters (K)
+# Use a clustering algorithm to determine the optimal number of clusters (K).
+# We'll use the k-means algorithm.
+
+# Calculate within-cluster sum of squares for different values of K
+wss <- vector("double", length = 10)
+
+for (i in 1:10) {
+  kmeans_model <- kmeans(selected_data, centers = i)
+  wss[i] <- kmeans_model$tot.withinss
+}
+
+# Finding optimal k using "Elbow Method"
+plot(1:10, wss, type = "b", xlab = "Number of Clusters (K)", ylab = "Within-Cluster Sum of Squares")
