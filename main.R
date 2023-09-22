@@ -66,6 +66,17 @@ subset_df = function(df, x){
   return(df[df$Series.Code==x,])
 }
 
+#Function to remove empty columns
+remove_columns_with_na <- function(df) {
+  # Get NA only columns
+  na_columns <- which(colSums(is.na(df)) == nrow(df))
+
+  # Remove NA only columns
+  df <- df[, -na_columns]
+
+  return(df)
+}
+
 #Main Section
 setwd("/Users/geolangsatnarzary/Study - NTU_NBS/6002 - ML and AI/PyCharm Projects/Biz-Strategy-Based-On-World-Bank-Data/")
 filename <- "WB-Data.csv"
@@ -74,5 +85,5 @@ df00 <- read.csv(filename)
 df <- cleanWBData(df00)
 
 #Flattening the data by using groupByCountries function
-df = groupByCountries(df)
+df <- groupByCountries(df)
 
