@@ -164,3 +164,69 @@ print(clustered_countries)
 
 # Writing the result to a file
 write.table(clustered_countries, file = "grouped_countries.txt", sep = ",", row.names = FALSE)
+
+
+#### Exploring Clustering Based on Mean Values
+
+#Data Cleaning
+df <- cleanWBData(df00)
+df <- clean_dataframe(df)
+df <- remove_rows_with_all_data_na(df)
+
+# Mean of 10 years data
+df$Mean_10_Years <- rowMeans(df[, 5:14], na.rm = TRUE)
+
+# Removing the 10 years data except mean
+df <- df[, -c(5:14)]
+
+#GroupByCountry
+df <- groupByCountries(df)
+
+#Removing na introduced by Coercion
+df <- na.omit(df)
+
+selected_data <- df[, 2:6]
+
+# Step 2: Determining the Number of Clusters (K)
+# Using k-means clustering algorithm to determine the optimal number of clusters (K).
+
+# Initializing a vector to store within-cluster sum of squares...
+# for different values of k and visualizing using the 'Elbow Method'
+wss <- vector("double", length = 5)
+
+for (i in 1:5) {
+  kmeans_model <- kmeans(selected_data, centers = i)
+  wss[i] <- kmeans_model$tot.withinss
+}
+
+# Finding optimal k using "Elbow Method"
+plot(1:5, wss, type = "b", xlab = "Number of Clusters (K)", ylab = "Within-Cluster Sum of Squares")
+
+# Step 3: Clustering
+# Running the k-means clustering algorithm with the chosen K
+chosen_k <- 4
+kmeans_model <- kmeans(selected_data, centers = chosen_k)
+
+# Step 4: Analyze Clusters
+# Assign cluster labels
+cluster_labels <- kmeans_model$cluster
+
+# Add the cluster labels to original data
+backup_df <- df
+df <- cbind(df, Cluster = cluster_labels)
+
+# Confirming optimal k using silhouette plot
+silhouette_plot <- silhouette(kmeans_model$cluster, dist(selected_data))
+plot(silhouette_plot)
+
+# Grouped countries based on clusters
+clustered_countries <- aggregate(Country.Name ~ Cluster, data = df, FUN = function(x) paste(x, collapse = ', '))
+
+# Printing the result
+print(clustered_countries)
+
+# Writing the result to a file
+write.table(clustered_countries, file = "mean_grouped_countries.txt", sep = ",", row.names = FALSE)
+
+
+##### Conclusion: Almost the same Clustering was observed with similar silhouette plot.
