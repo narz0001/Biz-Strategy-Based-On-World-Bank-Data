@@ -108,8 +108,14 @@ setwd("/Users/geolangsatnarzary/Study - NTU_NBS/6002 - ML and AI/PyCharm Project
 filename <- "WB-Data.csv"
 df00 <- read.csv(filename)
 
+#Data Cleaning
 df <- cleanWBData(df00)
+df <- clean_dataframe(df)
+df <- remove_rows_with_all_data_na(df)
 
-#Flattening the data by using groupByCountries function
 df <- groupByCountries(df)
+
+#Removed NA values added by Coercion.
+##Removed these data because these countries be used for analysis.
+df <- na.omit(df)
 
