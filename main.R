@@ -149,8 +149,15 @@ kmeans_model <- kmeans(selected_data, centers = chosen_k)
 cluster_labels <- kmeans_model$cluster
 
 # Add the cluster labels to original data
-df_with_clusters <- cbind(df, Cluster = cluster_labels)
+backup_df <- df
+df <- cbind(df, Cluster = cluster_labels)
 
-#Confirming optimal k using silhouette plot
+# Confirming optimal k using silhouette plot
 silhouette_plot <- silhouette(kmeans_model$cluster, dist(selected_data))
 plot(silhouette_plot)
+
+# Grouped countries based on clusters
+clustered_countries <- aggregate(Country.Name ~ Cluster, data = df, FUN = function(x) paste(x, collapse = ', '))
+
+# Printing the result
+print(clustered_countries)
