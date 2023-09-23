@@ -242,3 +242,21 @@ write.table(clustered_countries, file = "mean_grouped_countries.txt", sep = ",",
 
 
 ##### Conclusion: Almost the same Clustering was observed with similar silhouette plot.
+
+
+##### Ranking Countries based on parameters and getting a Composite Mean score
+# Calculating ranks for each column
+df$`GDP - Rank` <- rank(-df$`NY.GDP.PCAP.CD.Mean_10_Years`)
+df$`Internet User - Rank` <- rank(-df$`IT.NET.USER.ZS.Mean_10_Years`)
+df$`Cell User - Rank` <- rank(-df$`IT.CEL.SETS.P2.Mean_10_Years`)
+df$`% Work Force with Adv Degree - Rank` <- rank(-df$`SL.TLF.ADVN.ZS.Mean_10_Years`)
+df$`Political Stability - Rank` <- rank(-df$`PV.PER.RNK.Mean_10_Years`)
+
+# Calculating Composite-Score as the mean of the Ranks of the other parameters
+df$`Composite-Score` <- rowMeans(df[, c("GDP - Rank", "Internet User - Rank", "Cell User - Rank", "% Work Force with Adv Degree - Rank", "Political Stability - Rank")])
+
+# Calculating Composite-Rank based on Composite-Score (lower score means higher rank)
+df$`Composite-Rank` <- rank(df$`Composite-Score`)
+
+# Write df to a file
+write.csv(df, 'Ranked.csv')
