@@ -216,8 +216,15 @@ backup_df <- df
 df <- cbind(df, Cluster = cluster_labels)
 
 # Confirming optimal k using silhouette plot
-silhouette_plot <- silhouette(kmeans_model$cluster, dist(selected_data))
-plot(silhouette_plot)
+
+# Calculate silhouette values
+silhouette_vals <- silhouette(kmeans_model$cluster, dist(selected_data))
+colors <- rainbow(max(kmeans_model$cluster))
+
+plot(silhouette_vals, col = colors)
+
+# Adding cluster labels
+abline(v = mean(silhouette_vals), col = "red", lty = 2)
 
 # Grouped countries based on clusters
 clustered_countries <- aggregate(Country.Name ~ Cluster, data = df, FUN = function(x) paste(x, collapse = ', '))
